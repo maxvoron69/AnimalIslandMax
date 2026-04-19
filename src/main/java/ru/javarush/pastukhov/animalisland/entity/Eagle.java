@@ -1,20 +1,20 @@
 package ru.javarush.pastukhov.animalisland.entity;
 
-public class Eagle extends Predators{
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+public class Eagle extends Predators {
+
+    private static final Logger LOGGER = Logger.getLogger(Eagle.class.getName());
 
     public Eagle(int currentCount) {
         super("eagle", currentCount);
     }
 
     @Override
-    public boolean eat() {
-        System.out.println("Орёл ест добычу...");
-        return true;
-    }
-
-    @Override
     protected Organism createNewInstance() {
-        return new  Eagle(1);
+        LOGGER.log(Level.INFO, "Родился орлёнок!");
+        return new Eagle(1);
     }
 
     @Override

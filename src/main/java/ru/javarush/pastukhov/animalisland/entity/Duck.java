@@ -1,19 +1,21 @@
 package ru.javarush.pastukhov.animalisland.entity;
 
-public class Duck extends Herbivores{
+import ru.javarush.pastukhov.animalisland.util.GameUtils;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+public class Duck extends Herbivores {
+
+    private static final Logger LOGGER = Logger.getLogger(Duck.class.getName());
 
     public Duck(int currentCount) {
         super("duck", currentCount);
     }
 
     @Override
-    public boolean eat() {
-        System.out.println("Утка ест гусеницу...");
-        return true;
-    }
-
-    @Override
     protected Organism createNewInstance() {
+        LOGGER.log(Level.INFO, "Родился утёнок!");
         return new Duck(1);
     }
 

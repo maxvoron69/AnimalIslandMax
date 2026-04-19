@@ -1,17 +1,15 @@
 package ru.javarush.pastukhov.animalisland;
 
-import ru.javarush.pastukhov.animalisland.entity.Sheep;
+import java.util.logging.Logger;
 
 public class Main {
     public static void main(String[] args) {
-        Sheep sheep = new Sheep(8);
-        System.out.println(sheep);
+        System.setProperty("java.util.logging.config.file", "src/main/resources/logging.properties");
 
-        sheep.eat();
+        Logger logger = Logger.getLogger(Main.class.getName());
+        logger.info("Симуляция острова запущена...");
 
-        Sheep pup = (Sheep) sheep.reproduce();
-        if (pup != null) {
-            System.out.println("Родилась овца: " + pup);
-        }
+        Simulation simulation = new Simulation();
+        simulation.run();
     }
 }

@@ -1,19 +1,21 @@
 package ru.javarush.pastukhov.animalisland.entity;
 
-public class Goat extends Herbivores{
+import ru.javarush.pastukhov.animalisland.util.GameUtils;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+public class Goat extends Herbivores {
+
+    private static final Logger LOGGER = Logger.getLogger(Goat.class.getName());
 
     public Goat(int currentCount) {
         super("goat", currentCount);
     }
 
     @Override
-    public boolean eat() {
-        System.out.println("Коза щиплет травку...");
-        return true;
-    }
-
-    @Override
     protected Organism createNewInstance() {
+        LOGGER.log(Level.INFO, "Родился козлёнок!");
         return new Goat(1);
     }
 

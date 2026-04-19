@@ -1,19 +1,21 @@
 package ru.javarush.pastukhov.animalisland.entity;
 
+import ru.javarush.pastukhov.animalisland.util.GameUtils;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Caterpillar extends Herbivores {
+
+    private static final Logger LOGGER = Logger.getLogger(Caterpillar.class.getName());
 
     public Caterpillar(int currentCount) {
         super("caterpillar", currentCount);
     }
 
     @Override
-    public boolean eat() {
-        System.out.println("Гусеница ест листочки...");
-        return true;
-    }
-
-    @Override
     protected Organism createNewInstance() {
+        LOGGER.log(Level.INFO, "Родилась гусеничка!");
         return new Caterpillar(1);
     }
 

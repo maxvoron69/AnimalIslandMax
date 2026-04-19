@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import static javax.swing.UIManager.getInt;
-
 public class AnimalConfig {
 
     private static final Properties PROPERTIES = new Properties();
@@ -27,13 +25,13 @@ public class AnimalConfig {
     public static double getDouble(String key) {
         String value = PROPERTIES.getProperty(key);
         if (value == null) {
-            throw new RuntimeException("Конфигурация не найдена: " + key);
+            throw  new RuntimeException("Конфигурация не найдена: " + key);
         }
         return Double.parseDouble(value.trim());
     }
 
-        public static int getInt(String key) {
-            return (int) getDouble(key);
+    public static int getInt(String key) {
+        return (int) getDouble(key);
     }
 
     public static double getWeight(String animalType) {
@@ -51,4 +49,8 @@ public class AnimalConfig {
     public static double getMaximumFoodLoad(String animalType) {
         return getDouble("animal." + animalType + ".maximumFoodLoad");
     }
+    public static double getHerbivoreBaseEatingSuccessRate() {
+        return getDouble("herbivore.base.eating.success.rate");
+    }
 }
+

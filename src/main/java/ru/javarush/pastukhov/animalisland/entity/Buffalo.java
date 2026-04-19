@@ -1,21 +1,24 @@
 package ru.javarush.pastukhov.animalisland.entity;
 
-public class Buffalo extends Herbivores{
+import ru.javarush.pastukhov.animalisland.util.GameUtils;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+public class Buffalo extends Herbivores {
+
+    private static final Logger LOGGER = Logger.getLogger(Buffalo.class.getName());
 
     public Buffalo(int currentCount) {
         super("buffalo", currentCount);
     }
 
     @Override
-    public boolean eat() {
-        System.out.println("Буйвол щиплет травку...");
-        return true;
+    protected Organism createNewInstance() {
+        LOGGER.log(Level.INFO, "Родился буйволёнок!");
+        return new Buffalo(1);
     }
 
-    @Override
-    protected Organism createNewInstance() {
-        return new  Buffalo(1);
-    }
     @Override
     public String toString() {
         return "Buffalo{" +

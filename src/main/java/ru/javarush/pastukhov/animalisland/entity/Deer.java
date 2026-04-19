@@ -1,19 +1,21 @@
 package ru.javarush.pastukhov.animalisland.entity;
 
-public class Deer extends Herbivores{
+import ru.javarush.pastukhov.animalisland.util.GameUtils;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+public class Deer extends Herbivores {
+
+    private static final Logger LOGGER = Logger.getLogger(Deer.class.getName());
 
     public Deer(int currentCount) {
         super("deer", currentCount);
     }
 
     @Override
-    public boolean eat() {
-        System.out.println("Олень щиплет травку...");
-        return true;
-    }
-
-    @Override
     protected Organism createNewInstance() {
+        LOGGER.log(Level.INFO, "Родился оленёнок!");
         return new Deer(1);
     }
 

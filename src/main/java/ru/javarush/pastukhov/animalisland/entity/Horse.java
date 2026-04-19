@@ -1,19 +1,21 @@
 package ru.javarush.pastukhov.animalisland.entity;
 
-public class Horse extends Herbivores{
+import ru.javarush.pastukhov.animalisland.util.GameUtils;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+public class Horse extends Herbivores {
+
+    private static final Logger LOGGER = Logger.getLogger(Horse.class.getName());
 
     public Horse(int currentCount) {
         super("horse", currentCount);
     }
 
     @Override
-    public boolean eat() {
-        System.out.println("Лошадь щиплет траву...");
-        return true;
-    }
-
-    @Override
     protected Organism createNewInstance() {
+        LOGGER.log(Level.INFO, "Родился жеребёнок!");
         return new Horse(1);
     }
 
