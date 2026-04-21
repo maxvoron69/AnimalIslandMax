@@ -1,9 +1,7 @@
 package ru.javarush.pastukhov.animalisland.entity;
 
 import ru.javarush.pastukhov.animalisland.config.AnimalConfig;
-import ru.javarush.pastukhov.animalisland.util.GameUtils;
-
-import java.util.Random;
+import ru.javarush.pastukhov.animalisland.util.Direction;
 
 public abstract class Animals extends Organism {
 
@@ -17,14 +15,36 @@ public abstract class Animals extends Organism {
         this.weight = AnimalConfig.getWeight(type);
         this.speed = AnimalConfig.getSpeed(type);
         this.maximumFoodLoad = AnimalConfig.getMaximumFoodLoad(type);
+        this.maxCount = AnimalConfig.getMaxCount(type);
     }
 
     public abstract boolean eat();
 
-    public String chooseDirection() {
-        String[] directions = {"UP", "DOWN", "LEFT", "RIGHT", "NONE"};
-        int index = GameUtils.RANDOM.nextInt(directions.length);
-        return directions[index];
+    public Direction chooseDirection() {
+        return Direction.getRandom();
+    }
+
+    public void moveTo(Cell fromCell, Cell toCell) {
+        if (fromCell != null && toCell != null) {
+            fromCell.getAnimals().remove(this);
+            toCell.addAnimal(this);
+        }
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public double getMaximumFoodLoad() {
+        return maximumFoodLoad;
+    }
+
+    public int getMaxCount() {
+        return maxCount;
     }
 
     @Override
@@ -39,18 +59,5 @@ public abstract class Animals extends Organism {
         }
         return child;
     }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public int getSpeed() {
-        return speed;
-    }
-
-    public double getMaximumFoodLoad() {
-        return maximumFoodLoad;
-    }
 }
-
 

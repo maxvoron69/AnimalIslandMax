@@ -12,7 +12,7 @@ public class Eagle extends Predators {
     }
 
     @Override
-    protected Organism createNewInstance() {
+    public Organism createNewInstance() {
         LOGGER.log(Level.INFO, "Родился орлёнок!");
         return new Eagle(1);
     }

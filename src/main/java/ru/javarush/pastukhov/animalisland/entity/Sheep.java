@@ -12,7 +12,7 @@ public class Sheep extends Herbivores {
     }
 
     @Override
-    protected Organism createNewInstance() {
+    public Organism createNewInstance() {
         LOGGER.log(Level.INFO, "Родился ягнёнок!");
         return new Sheep(1);
     }

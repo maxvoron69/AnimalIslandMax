@@ -35,11 +35,11 @@ public class PlantConfig {
         return (int) getDouble(key);
     }
 
-    public static double getWeightPlant() {
+    public static double getWeight() {
         return getDouble("plant.weight");
     }
 
-    public static int getMaxCountPlant() {
+    public static int getMaxCount() {
         return getInt("plant.maxCount");
     }
 

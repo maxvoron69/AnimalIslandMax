@@ -12,6 +12,9 @@ public class Cell {
     }
 
     public void addAnimal(Animals animal) {
+        if (animal == null) {
+            return;
+        }
         animals.add(animal);
     }
 
@@ -22,6 +25,7 @@ public class Cell {
     public Plant getPlants() {
         return plants;
     }
+
     public void setPlants(Plant plants) {
         if (plants == null) {
             throw new IllegalArgumentException("Растения не могут быть null");

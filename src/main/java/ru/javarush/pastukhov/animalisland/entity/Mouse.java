@@ -14,7 +14,7 @@ public class Mouse extends Herbivores{
     }
 
     @Override
-    protected Organism createNewInstance() {
+    public Organism createNewInstance() {
         LOGGER.log(Level.INFO, "Родился мышонок!");
         return new  Mouse(1);
     }

@@ -12,7 +12,7 @@ public class Boa extends Predators {
     }
 
     @Override
-    protected Organism createNewInstance() {
+    public Organism createNewInstance() {
         LOGGER.log(Level.INFO, "Родился удав!");
         return new Boa(1);
     }

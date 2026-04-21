@@ -12,7 +12,7 @@ public class Fox extends Predators{
     }
 
     @Override
-    protected Organism createNewInstance() {
+    public Organism createNewInstance() {
         LOGGER.log(Level.INFO, "Родился лисёнок!");
         return new Fox(1);
     }

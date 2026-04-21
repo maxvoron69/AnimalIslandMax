@@ -3,34 +3,44 @@ package ru.javarush.pastukhov.animalisland;
 import ru.javarush.pastukhov.animalisland.config.GameConfig;
 import ru.javarush.pastukhov.animalisland.config.PlantConfig;
 import ru.javarush.pastukhov.animalisland.entity.*;
+import ru.javarush.pastukhov.animalisland.util.Direction;
 import ru.javarush.pastukhov.animalisland.util.GameUtils;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class Simulation {
     private final Island island;
     private int currentTurn = 0;
+    private static final Logger LOGGER = Logger.getLogger(Simulation.class.getName());
 
     public Simulation() {
         this.island = new Island();
         initializeAnimals();
     }
 
-    Cell cell = new Cell();
-
     private void initializeAnimals() {
-        // Добавим одну овцу и одного волка для теста
-        Sheep sheep = new Sheep(1);
-        Wolf wolf = new Wolf(1);
 
-        island.getCell(0, 0).addAnimal(sheep);
-        island.getCell(0, 0).addAnimal(wolf);
+        List<Animals> animals = new ArrayList<>();
+        for (int i = 0; i < 5; i++) animals.add(new Wolf(1));
+        for (int i = 0; i < 10; i++) animals.add(new Sheep(1));
+
+        for (Animals animal : animals) {
+            int x = GameUtils.RANDOM.nextInt(island.getWidth());
+            int y = GameUtils.RANDOM.nextInt(island.getHeight());
+            island.getCell(x, y).addAnimal(animal);
+        }
     }
 
     public void run() {
-        while (currentTurn < 10) {
+        printIsland();
+
+        while (currentTurn < 5) {
             System.out.println("\n--- Ход " + (++currentTurn) + " ---");
             processTurn();
+            printIsland();
             try {
                 Thread.sleep(GameConfig.getTickDelay());
             } catch (InterruptedException e) {
@@ -40,17 +50,86 @@ public class Simulation {
     }
 
     private void processTurn() {
-        for (int x = 0; x < island.getWidth(); x++) {
-            for (int y = 0; y < island.getHeight(); y++) {
-                Cell cell = island.getCell(x, y);
-                processCell(cell);
+        moveAllAnimals();     // ✅ Сначала все животные двигаются (с учётом speed)
+        processAllCells();    // ✅ Потом охота, еда, размножение — по клеткам
+    }
+
+    private void moveAllAnimals() {
+        List<Animals> allAnimals = getAllAnimals();
+        Collections.shuffle(allAnimals); // случайный порядок
+
+        for (Animals animal : allAnimals) {
+            int[] pos = findAnimalPosition(animal);
+            if (pos != null) {
+                moveAnimal(animal, pos[0], pos[1]);
             }
         }
     }
 
-    private void processCell(Cell cell) {
-        List<Animals> animals = cell.getAnimals();
-        Plant plant = cell.getPlants(); // один объект Plant
+    private void moveAnimal(Animals animal, int fromX, int fromY) {
+        int currentX = fromX;
+        int currentY = fromY;
+
+        for (int step = 0; step < animal.getSpeed(); step++) {
+            Direction direction = animal.chooseDirection();
+            if (direction == Direction.NONE) break;
+
+            int newX = currentX, newY = currentY;
+
+            switch (direction) {
+                case UP -> newY = Math.max(0, currentY - 1);
+                case DOWN -> newY = Math.min(island.getHeight() - 1, currentY + 1);
+                case LEFT -> newX = Math.max(0, currentX - 1);
+                case RIGHT -> newX = Math.min(island.getWidth() - 1, currentX + 1);
+            }
+
+            Cell fromCell = island.getCell(currentX, currentY);
+            Cell toCell = island.getCell(newX, newY);
+
+            fromCell.getAnimals().remove(animal);
+            toCell.addAnimal(animal);
+
+            LOGGER.info(animal.getLocalizedType() + " сделал шаг: " + direction +
+                    " → (" + newX + ", " + newY + ")");
+
+            // Обновляем позицию для следующего шага
+            currentX = newX;
+            currentY = newY;
+        }
+    }
+
+    private List<Animals> getAllAnimals() {
+        List<Animals> animals = new ArrayList<>();
+        for (int x = 0; x < island.getWidth(); x++) {
+            for (int y = 0; y < island.getHeight(); y++) {
+                animals.addAll(island.getCell(x, y).getAnimals());
+            }
+        }
+        return animals;
+    }
+
+    private int[] findAnimalPosition(Animals animal) {
+        for (int x = 0; x < island.getWidth(); x++) {
+            for (int y = 0; y < island.getHeight(); y++) {
+                if (island.getCell(x, y).getAnimals().contains(animal)) {
+                    return new int[]{x, y};
+                }
+            }
+        }
+        return null;
+    }
+
+    private void processAllCells() {
+    for (int x = 0; x < island.getWidth(); x++) {
+        for (int y = 0; y < island.getHeight(); y++) {
+            processCell(x, y);
+        }
+    }
+}
+
+    private void processCell(int x, int y) {
+        Cell cell = island.getCell(x, y);
+        List<Animals> animals = new ArrayList<>(cell.getAnimals()); // копия для безопасности
 
         // --- Охота ---
         for (Animals predator : animals) {
@@ -63,12 +142,14 @@ public class Simulation {
             }
         }
 
-        // --- Травоядные едят ---
+        // --- Еда ---
+        Plant plant = cell.getPlants();
         for (Animals herbivore : animals) {
             if (herbivore instanceof Herbivores && cell.hasPlantsAvailable()) {
-                boolean ate = herbivore.eat(); // по вероятности
+                boolean ate = herbivore.eat();
                 if (ate) {
-                    plant.consume(); // уменьшает количество на 1
+                    Plant updated = cell.getPlants().consume();
+                    cell.setPlants(updated);
                 }
             }
         }
@@ -76,17 +157,54 @@ public class Simulation {
         // --- Размножение растений ---
         if (plant.canGrow() && GameUtils.RANDOM.nextDouble() < PlantConfig.getGrowthRate()) {
             Plant updated = (Plant) plant.createNewInstance();
-            cell.setPlants(updated); // обновляем состояние
+            cell.setPlants(updated);
         }
 
-        // --- Движение ---
-        for (Animals animal : animals) {
-            System.out.println(animal.getType() + " двигается: " + animal.chooseDirection());
-        }
-
-        // --- Размножение животных ---
-        for (Animals animal : animals) {
+        // --- Размножение ---
+        for (Animals animal : cell.getAnimals()) {
             animal.reproduce();
         }
+    }
+
+    public void printIsland() {
+        System.out.println("\n=== ОСТРОВ (" + island.getWidth() + "x" + island.getHeight() + ") ===");
+        for (int y = 0; y < island.getHeight(); y++) {
+            System.out.print("[");
+            for (int x = 0; x < island.getWidth(); x++) {
+                Cell cell = island.getCell(x, y);
+                String cellContent = formatCell(cell);
+                System.out.printf("%-10s", cellContent);
+                if (x < island.getWidth() - 1) System.out.print(" | ");
+            }
+            System.out.println("]");
+        }
+        System.out.println("===================================");
+    }
+
+    private String formatCell(Cell cell) {
+        if (cell == null) {
+            return " ";
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        // Животные
+        for (Animals animal : cell.getAnimals()) {
+            if (animal == null) continue;
+            String type = switch (animal.getType()) {
+                case "wolf" -> "🐺";
+                case "sheep" -> "🐑";
+                default -> animal.getType().substring(0, 1).toUpperCase();
+            };
+            sb.append(type).append(animal.getCurrentCount());
+        }
+
+        // Растения
+        int plantCount = cell.getPlants().getCurrentCount();
+        if (plantCount > 0) {
+            sb.append(" 🌿").append(plantCount);
+        }
+
+        return sb.length() > 0 ? sb.toString() : " ";
     }
 }

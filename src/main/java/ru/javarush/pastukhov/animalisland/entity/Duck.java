@@ -14,7 +14,7 @@ public class Duck extends Herbivores {
     }
 
     @Override
-    protected Organism createNewInstance() {
+    public Organism createNewInstance() {
         LOGGER.log(Level.INFO, "Родился утёнок!");
         return new Duck(1);
     }

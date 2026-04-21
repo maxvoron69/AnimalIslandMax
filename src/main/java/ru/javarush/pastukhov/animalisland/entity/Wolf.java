@@ -12,7 +12,7 @@ public class Wolf extends Predators {
     }
 
     @Override
-    protected Organism createNewInstance() {
+    public Organism createNewInstance() {
         LOGGER.log(Level.INFO, "Родился волчонок!");
         return new Wolf(1);
     }

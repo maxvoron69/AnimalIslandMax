@@ -11,45 +11,43 @@ public class Plant extends Organism {
     private static final Logger LOGGER = Logger.getLogger(Plant.class.getName());
 
     // Максимальное количество растений на одной клетке
-    private static final int MAX_PLANTS_PER_CELL = PlantConfig.getMaxCountPlant();
+    private static final int MAX_PLANTS_PER_CELL = PlantConfig.getMaxCount();
 
     // Вес одного растения (сколько еды даёт)
-    private static final double PLANT_WEIGHT = PlantConfig.getWeightPlant();
+    private static final double PLANT_WEIGHT = PlantConfig.getWeight();
 
     public Plant(int count) {
         super("plant", Math.min(count, MAX_PLANTS_PER_CELL));
     }
 
-    @Override
     public boolean eat() {
         LOGGER.log(Level.WARNING, "Растения не едят.");
         return false;
     }
 
     @Override
-    protected Organism createNewInstance() {
+    public Organism createNewInstance() {
         if (getCurrentCount() >= MAX_PLANTS_PER_CELL) {
-            return this; // уже максимум
+            return new Plant(getCurrentCount()); // уже максимум
         }
 
         if (GameUtils.RANDOM.nextDouble() < PlantConfig.getGrowthRate()) {
             int newCount = Math.min(getCurrentCount() + 1, MAX_PLANTS_PER_CELL);
-            LOGGER.log(Level.INFO, "Растения размножились! Теперь: " + newCount + " шт.");
             return new Plant(newCount);
         }
 
-        return this;
+        return new Plant(getCurrentCount());
     }
 
-    public void consume() {
-        if (getCurrentCount() > 0) {
-            setCurrentCount(getCurrentCount() - 1);
-            LOGGER.log(Level.INFO, "Травоядное съело одно растение. Осталось: " + getCurrentCount());
+    public Plant consume() {
+        if (getCurrentCount() <= 0) {
+            LOGGER.log(Level.WARNING, "Нечего есть — растений нет.");
+            return this;
         }
-    }
 
-    public double getPlantWeight() {
-        return PLANT_WEIGHT;
+        int newCount = getCurrentCount() - 1;
+        LOGGER.log(Level.INFO, "Травоядное съело одно растение. Осталось: " + newCount);
+        return new Plant(newCount);
     }
 
     public boolean canGrow() {

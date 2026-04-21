@@ -14,7 +14,7 @@ public class Deer extends Herbivores {
     }
 
     @Override
-    protected Organism createNewInstance() {
+    public Organism createNewInstance() {
         LOGGER.log(Level.INFO, "Родился оленёнок!");
         return new Deer(1);
     }

@@ -14,7 +14,7 @@ public class Buffalo extends Herbivores {
     }
 
     @Override
-    protected Organism createNewInstance() {
+    public Organism createNewInstance() {
         LOGGER.log(Level.INFO, "Родился буйволёнок!");
         return new Buffalo(1);
     }

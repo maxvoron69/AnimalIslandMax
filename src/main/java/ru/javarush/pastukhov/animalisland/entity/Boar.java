@@ -14,7 +14,7 @@ public class Boar extends Herbivores {
     }
 
     @Override
-    protected Organism createNewInstance() {
+    public Organism createNewInstance() {
         LOGGER.log(Level.INFO, "Родился кабанчик!");
         return new Boar(1);
     }

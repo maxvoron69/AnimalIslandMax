@@ -14,7 +14,7 @@ public class Rabbit extends Herbivores {
     }
 
     @Override
-    protected Organism createNewInstance() {
+    public Organism createNewInstance() {
         LOGGER.log(Level.INFO, "Родился крольчонок!");
         return new Rabbit(1);
     }

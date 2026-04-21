@@ -37,6 +37,12 @@ public class TranslationUtil {
             case "duck" -> "утка";
             case "caterpillar" -> "гусеница";
 
+            case "wolf" -> "волк";
+            case "fox" -> "лиса";
+            case "bear" -> "медведь";
+            case "eagle" -> "орёл";
+            case "boa" -> "удав";
+
             default -> type;
         };
     }

@@ -26,7 +26,8 @@ public abstract class Organism {
             return createNewInstance();
         }
     }
-    protected abstract Organism createNewInstance();
+
+    public abstract Organism createNewInstance();
 
     public String getType() {
         return type;
@@ -36,7 +37,7 @@ public abstract class Organism {
         return currentCount;
     }
 
-    protected String getLocalizedType() {
+    public String getLocalizedType() {
         return TranslationUtil.capitalize(TranslationUtil.toNominativ(getType()));
     }
 }

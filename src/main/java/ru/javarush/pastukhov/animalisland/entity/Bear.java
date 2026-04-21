@@ -12,7 +12,7 @@ public class Bear extends Predators {
     }
 
     @Override
-    protected Organism createNewInstance() {
+    public Organism createNewInstance() {
         LOGGER.log(Level.INFO, "Родился медвежонок!");
         return new Bear(1);
     }
