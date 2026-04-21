@@ -1,20 +1,25 @@
 package ru.javarush.pastukhov.animalisland;
 
+import ru.javarush.pastukhov.animalisland.config.AnimalConfig;
 import ru.javarush.pastukhov.animalisland.config.GameConfig;
 import ru.javarush.pastukhov.animalisland.config.PlantConfig;
 import ru.javarush.pastukhov.animalisland.entity.*;
 import ru.javarush.pastukhov.animalisland.util.Direction;
 import ru.javarush.pastukhov.animalisland.util.GameUtils;
+import ru.javarush.pastukhov.animalisland.util.TranslationUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Logger;
 
 public class Simulation {
     private final Island island;
     private int currentTurn = 0;
     private static final Logger LOGGER = Logger.getLogger(Simulation.class.getName());
+    private final Scanner scanner = new Scanner(System.in);
+    private static final int CELL_WIDTH = 30;
 
     public Simulation() {
         this.island = new Island();
@@ -22,16 +27,48 @@ public class Simulation {
     }
 
     private void initializeAnimals() {
+        System.out.println("Вам необходимо задать начальное количество животных на острове.");
 
         List<Animals> animals = new ArrayList<>();
-        for (int i = 0; i < 5; i++) animals.add(new Wolf(1));
-        for (int i = 0; i < 10; i++) animals.add(new Sheep(1));
+
+        for (String animalType : AnimalConfig.getAnimalTypes()) {
+            int maxCount = AnimalConfig.getMaxCount(animalType);
+            int count;
+
+            while (true) {
+                System.out.printf("Сколько %s добавить на остров? (максимум %d): ", TranslationUtil.toNominativPlural(animalType), maxCount);
+                if (scanner.hasNextInt()) {
+                    count = scanner.nextInt();
+                    if (count >= 0 && count <= maxCount) {
+                        break;
+                    } else {
+                        System.out.println("Введите число от 0 до " + maxCount);
+                    }
+                } else {
+                    System.out.println("Пожалуйста, введите корректное число.");
+                    scanner.next(); // очистить некорректный ввод
+                }
+            }
+
+            // Создаём указанное количество особей
+            Class<? extends Animals> animalClass = getAnimalClass(animalType);
+            for (int i = 0; i < count; i++) {
+                try {
+                    Animals animal = animalClass.getConstructor(int.class).newInstance(1);
+                    animals.add(animal);
+                } catch (Exception e) {
+                    LOGGER.severe("Не удалось создать экземпляр: " + animalType);
+                }
+            }
+        }
 
         for (Animals animal : animals) {
             int x = GameUtils.RANDOM.nextInt(island.getWidth());
             int y = GameUtils.RANDOM.nextInt(island.getHeight());
             island.getCell(x, y).addAnimal(animal);
         }
+
+        System.out.println("Инициализация завершена. Животные размещены.");
     }
 
     public void run() {
@@ -120,12 +157,12 @@ public class Simulation {
     }
 
     private void processAllCells() {
-    for (int x = 0; x < island.getWidth(); x++) {
-        for (int y = 0; y < island.getHeight(); y++) {
-            processCell(x, y);
+        for (int x = 0; x < island.getWidth(); x++) {
+            for (int y = 0; y < island.getHeight(); y++) {
+                processCell(x, y);
+            }
         }
     }
-}
 
     private void processCell(int x, int y) {
         Cell cell = island.getCell(x, y);
@@ -181,30 +218,56 @@ public class Simulation {
         System.out.println("===================================");
     }
 
-    private String formatCell(Cell cell) {
-        if (cell == null) {
-            return " ";
-        }
+   private String formatCell(Cell cell) {
+    if (cell == null) {
+        return " ".repeat(CELL_WIDTH);
+    }
 
-        StringBuilder sb = new StringBuilder();
+    StringBuilder sb = new StringBuilder();
 
-        // Животные
-        for (Animals animal : cell.getAnimals()) {
-            if (animal == null) continue;
-            String type = switch (animal.getType()) {
-                case "wolf" -> "🐺";
-                case "sheep" -> "🐑";
-                default -> animal.getType().substring(0, 1).toUpperCase();
-            };
-            sb.append(type).append(animal.getCurrentCount());
-        }
+    // Животные
+    for (Animals animal : cell.getAnimals()) {
+        if (animal == null) continue;
+        String emoji = AnimalConfig.getAnimalEmoji(animal.getType());
+        sb.append(emoji).append(animal.getCurrentCount());
+    }
 
-        // Растения
-        int plantCount = cell.getPlants().getCurrentCount();
-        if (plantCount > 0) {
-            sb.append(" 🌿").append(plantCount);
-        }
+    // Растения
+    int plantCount = cell.getPlants().getCurrentCount();
+    if (plantCount > 0) {
+        sb.append(" ").append(PlantConfig.getEmoji()).append(plantCount);
+    }
 
-        return sb.length() > 0 ? sb.toString() : " ";
+    String content = sb.length() > 0 ? sb.toString() : " ";
+
+    // Выравнивание: обрезаем или дополняем пробелами до CELL_WIDTH
+    if (content.length() > CELL_WIDTH) {
+        content = content.substring(0, CELL_WIDTH); // Обрезаем, если слишком длинно
+    } else {
+        content = String.format("%-" + CELL_WIDTH + "s", content); // Дополняем пробелами справа
+    }
+
+    return content;
+}
+
+    private Class<? extends Animals> getAnimalClass(String type) {
+        return switch (type) {
+            case "wolf" -> Wolf.class;
+            case "sheep" -> Sheep.class;
+            case "rabbit" -> Rabbit.class;
+            case "fox" -> Fox.class;
+            case "bear" -> Bear.class;
+            case "boar" -> Boar.class;
+            case "horse" -> Horse.class;
+            case "deer" -> Deer.class;
+            case "goat" -> Goat.class;
+            case "duck" -> Duck.class;
+            case "eagle" -> Eagle.class;
+            case "mouse" -> Mouse.class;
+            case "buffalo" -> Buffalo.class;
+            case "boa" -> Boa.class;
+            case "caterpillar" -> Caterpillar.class;
+            default -> throw new IllegalArgumentException("Неизвестный тип животного: " + type);
+        };
     }
 }

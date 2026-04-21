@@ -2,7 +2,9 @@ package ru.javarush.pastukhov.animalisland.config;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 public class GameConfig {
     private static final Properties PROPERTIES = new Properties();
@@ -42,12 +44,7 @@ public class GameConfig {
         return PROPERTIES.getProperty("simulation.stop.condition", "allDead");
     }
 
-    // === Начальное количество животных ===
-    public static int getInitialCount(String animalType) {
-        return getInt("initial.animal." + animalType);
-    }
-
-    // === Количество детёнышей при размножении ===
+     // === Количество детёнышей при размножении ===
     public static int getReproductionCount(String animalType) {
         return getInt("reproduction.count." + animalType);
     }

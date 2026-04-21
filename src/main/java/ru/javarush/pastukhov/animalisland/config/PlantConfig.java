@@ -2,6 +2,8 @@ package ru.javarush.pastukhov.animalisland.config;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
 public class PlantConfig {
@@ -17,7 +19,7 @@ public class PlantConfig {
                 throw new RuntimeException("Файл plant.properties не найден в resources!");
             }
 
-            PROPERTIES.load(input);
+            PROPERTIES.load(new InputStreamReader(input, StandardCharsets.UTF_8));
         } catch (IOException e) {
             throw new RuntimeException("Ошибка при загрузке plant.properties", e);
         }
@@ -46,5 +48,10 @@ public class PlantConfig {
     public static double getGrowthRate() {
         return getDouble("plant.growthRate");
     }
+
+    public static String getEmoji() {
+        return PROPERTIES.getProperty("plant.emoji", "?");
+    }
 }
+
 
