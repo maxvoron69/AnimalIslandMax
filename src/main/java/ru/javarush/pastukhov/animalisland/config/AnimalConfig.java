@@ -70,6 +70,5 @@ public class AnimalConfig {
     public static String getAnimalEmoji(String animalType) {
         return PROPERTIES.getProperty(animalType + ".emoji", "?");
     }
-
 }
 

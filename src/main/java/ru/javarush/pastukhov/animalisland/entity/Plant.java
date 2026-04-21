@@ -27,16 +27,7 @@ public class Plant extends Organism {
 
     @Override
     public Organism createNewInstance() {
-        if (getCurrentCount() >= MAX_PLANTS_PER_CELL) {
-            return new Plant(getCurrentCount()); // уже максимум
-        }
-
-        if (GameUtils.RANDOM.nextDouble() < PlantConfig.getGrowthRate()) {
-            int newCount = Math.min(getCurrentCount() + 1, MAX_PLANTS_PER_CELL);
-            return new Plant(newCount);
-        }
-
-        return new Plant(getCurrentCount());
+       return new Plant(1);
     }
 
     public Plant consume() {

@@ -44,6 +44,10 @@ public class GameConfig {
         return PROPERTIES.getProperty("simulation.stop.condition", "allDead");
     }
 
+    public static int getInitialQuantityAnimal(String animalType) {
+        return getInt("initial.animal." + animalType);
+    }
+
      // === Количество детёнышей при размножении ===
     public static int getReproductionCount(String animalType) {
         return getInt("reproduction.count." + animalType);

@@ -1,5 +1,6 @@
 package ru.javarush.pastukhov.animalisland.entity;
 
+import ru.javarush.pastukhov.animalisland.config.AnimalConfig;
 import ru.javarush.pastukhov.animalisland.config.GameConfig;
 import ru.javarush.pastukhov.animalisland.util.TranslationUtil;
 
@@ -7,7 +8,6 @@ import static ru.javarush.pastukhov.animalisland.config.AnimalConfig.getMaxCount
 
 public abstract class Organism {
     protected String type;
-
     protected int currentCount;
 
     public Organism(String type, int currentCount) {
@@ -16,15 +16,10 @@ public abstract class Organism {
     }
 
     public Organism reproduce() {
-        int maxCount = getMaxCount(type);
-        int reproductionCount = GameConfig.getReproductionCount(type);
-
-        if (currentCount >= maxCount) {
+        if (currentCount >= AnimalConfig.getMaxCount(type)) {
             return null;
-        } else {
-            currentCount++;
-            return createNewInstance();
         }
+        return createNewInstance();
     }
 
     public abstract Organism createNewInstance();

@@ -24,13 +24,6 @@ public abstract class Animals extends Organism {
         return Direction.getRandom();
     }
 
-    public void moveTo(Cell fromCell, Cell toCell) {
-        if (fromCell != null && toCell != null) {
-            fromCell.getAnimals().remove(this);
-            toCell.addAnimal(this);
-        }
-    }
-
     public double getWeight() {
         return weight;
     }
@@ -49,14 +42,10 @@ public abstract class Animals extends Organism {
 
     @Override
     public Organism reproduce() {
-        int maxCount = AnimalConfig.getMaxCount(getType());
         if (getCurrentCount() >= maxCount) {
             return null;
         }
-        Organism child = super.reproduce();
-        if (child != null) {
-            System.out.println("Родился " + getType() + "!");
-        }
+        Organism child = createNewInstance();
         return child;
     }
 }
