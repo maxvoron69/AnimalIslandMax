@@ -6,9 +6,23 @@ import java.util.List;
 public class Cell {
     private final List<Animals> animals = new ArrayList<>();
     private Plant plants;
+    private final int x;
 
-    public Cell(){
-        this.plants=new Plant(10);
+    public Cell(int x, int y) {
+        this.x = x;
+        this.y = y;
+        this.plants = new Plant(10); // начальное количество растений
+    }
+
+    private final int y;
+
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 
     public void addAnimal(Animals animal) {
@@ -40,7 +54,9 @@ public class Cell {
     @Override
     public String toString() {
         return "Cell{" +
-                "животных=" + animals.size() +
+                "x=" + x +
+                ", y=" + y +
+                ", животных=" + animals.size() +
                 ", растений=" + plants.getCurrentCount() +
                 '}';
     }

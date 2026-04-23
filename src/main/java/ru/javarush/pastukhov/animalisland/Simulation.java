@@ -11,6 +11,8 @@ import ru.javarush.pastukhov.animalisland.util.TranslationUtil;
 import java.util.*;
 import java.util.logging.Logger;
 
+import static ru.javarush.pastukhov.animalisland.config.AnimalConfig.getSpeed;
+
 public class Simulation {
     private final Island island;
     private int currentTurn = 0;
@@ -91,7 +93,7 @@ public class Simulation {
         int currentX = fromX;
         int currentY = fromY;
 
-        for (int step = 0; step < animal.getSpeed(); step++) {
+        for (int step = 0; step < getSpeed(animal.getType()); step++) {
             Direction direction = animal.chooseDirection();
             if (direction == Direction.NONE) break;
 
@@ -156,13 +158,13 @@ public class Simulation {
             if (predator instanceof Predators) {
                 for (Animals prey : animals) {
                     if (predator != prey) {
-                        ((Predators) predator).eat(prey.getType());
+                        ((Predators) predator).hunt(prey.getType(), cell);
                     }
                 }
             }
         }
 
-        // --- Еда ---
+        // --- Травоядные едят растения ---
         Plant plant = cell.getPlants();
         for (Animals herbivore : animals) {
             if (herbivore instanceof Herbivores && cell.hasPlantsAvailable()) {
@@ -182,10 +184,21 @@ public class Simulation {
 
         // --- Размножение ---
         for (Animals animal : new ArrayList<>(cell.getAnimals())) {
-            Organism child = animal.reproduce();
+            Organism child = animal.reproduce(cell);
             if (child != null) {
                 cell.addAnimal((Animals) child);
             }
+        }
+        // --- Голодание ---
+        for (Animals animal : animals) {
+            animal.starve(); //
+        }
+
+        // --- Удаление мёртвых ---
+        animals.removeIf(animal -> !animal.isAlive());
+        for (Animals dead : animals) {
+            cell.getAnimals().remove(dead);
+            LOGGER.info(dead.getLocalizedType() + " умер от голода в клетке (" + x + ", " + y + ")");
         }
     }
 
@@ -320,22 +333,22 @@ public class Simulation {
         System.out.println("                     ФИНАЛЬНАЯ СТАТИСТИКА");
         System.out.println("=".repeat(80));
 
-        // Заголовок
         System.out.printf("%-4s", "Ход");
         for (String type : AnimalConfig.getAnimalTypes()) {
-            System.out.printf(" | %-6s", type.substring(0, 1).toUpperCase()); // W, S, R...
+            String localized = TranslationUtil.toNominativ(type);
+            localized = TranslationUtil.capitalize(localized);
+            System.out.printf(" | %-10s", localized);
         }
-        System.out.printf(" | %-8s%n", "Растения");
+        System.out.printf(" | %-10s%n", "Растения");
         System.out.println("-".repeat(80));
 
-        // Данные
         for (PopulationRecord record : populationHistory) {
-            System.out.printf("%-4d", record.turn);
+            System.out.printf("%-6d", record.turn);
             for (String type : AnimalConfig.getAnimalTypes()) {
                 int count = record.animalCounts.getOrDefault(type, 0);
-                System.out.printf(" | %-6d", count);
+                System.out.printf(" | %-10d", count);
             }
-            System.out.printf(" | %-8d%n", record.plants);
+            System.out.printf(" | %-10d%n", record.plants);
         }
         System.out.println("=".repeat(80));
     }

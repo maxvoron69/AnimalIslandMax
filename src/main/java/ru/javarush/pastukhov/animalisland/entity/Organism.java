@@ -16,9 +16,6 @@ public abstract class Organism {
     }
 
     public Organism reproduce() {
-        if (currentCount >= AnimalConfig.getMaxCount(type)) {
-            return null;
-        }
         return createNewInstance();
     }
 
