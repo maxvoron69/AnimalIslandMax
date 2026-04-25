@@ -5,24 +5,23 @@ import ru.javarush.pastukhov.animalisland.util.GameUtils;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Mouse extends Herbivores{
+public class Mouse extends Herbivores {
 
     private static final Logger LOGGER = Logger.getLogger(Mouse.class.getName());
 
-    public Mouse(int currentCount) {
-        super("mouse", currentCount);
+    public Mouse() {
+        super("mouse");
     }
 
     @Override
     public Organism createNewInstance() {
         LOGGER.log(Level.INFO, "Родился мышонок!");
-        return new  Mouse(1);
+        return new Mouse();
     }
 
     @Override
     public String toString() {
         return "Mouse{" +
-                "count=" + getCurrentCount() +
                 ", weight=" + getWeight() +
                 '}';
     }

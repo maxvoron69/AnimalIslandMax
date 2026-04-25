@@ -7,20 +7,19 @@ public class Eagle extends Predators {
 
     private static final Logger LOGGER = Logger.getLogger(Eagle.class.getName());
 
-    public Eagle(int currentCount) {
-        super("eagle", currentCount);
+    public Eagle() {
+        super("eagle");
     }
 
     @Override
     public Organism createNewInstance() {
         LOGGER.log(Level.INFO, "Родился орлёнок!");
-        return new Eagle(1);
+        return new Eagle();
     }
 
     @Override
     public String toString() {
         return "Eagle{" +
-                "count=" + getCurrentCount() +
                 ", weight=" + getWeight() +
                 '}';
     }

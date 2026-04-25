@@ -9,20 +9,19 @@ public class Horse extends Herbivores {
 
     private static final Logger LOGGER = Logger.getLogger(Horse.class.getName());
 
-    public Horse(int currentCount) {
-        super("horse", currentCount);
+    public Horse() {
+        super("horse");
     }
 
     @Override
     public Organism createNewInstance() {
         LOGGER.log(Level.INFO, "Родился жеребёнок!");
-        return new Horse(1);
+        return new Horse();
     }
 
     @Override
     public String toString() {
         return "Horse{" +
-                "count=" + getCurrentCount() +
                 ", weight=" + getWeight() +
                 '}';
     }

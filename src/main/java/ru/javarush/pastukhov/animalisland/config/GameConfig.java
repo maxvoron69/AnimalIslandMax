@@ -48,12 +48,6 @@ public class GameConfig {
         return getInt("initial.animal." + animalType);
     }
 
-     // === Количество детёнышей при размножении ===
-    public static int getReproductionCount(String animalType) {
-        return getInt("reproduction.count." + animalType);
-    }
-
-    // Универсальные приватные методы
     private static int getInt(String key) {
         String value = PROPERTIES.getProperty(key);
         if (value == null) {

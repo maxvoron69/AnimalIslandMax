@@ -2,9 +2,7 @@ package ru.javarush.pastukhov.animalisland.config;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 public class PredatorFoodConfig {
     private static final Map<String, Map<String, Double>> PREDATOR_EATING_RATES = new HashMap<>();
@@ -40,5 +38,17 @@ public class PredatorFoodConfig {
         return PREDATOR_EATING_RATES
                 .getOrDefault(predator, new HashMap<>())
                 .getOrDefault(prey, 0.0);
+    }
+
+    public static Set<String> getPreyTypes(String predator) {
+        Map<String, Double> preyRates = PREDATOR_EATING_RATES.get(predator);
+        if (preyRates == null || preyRates.isEmpty()) {
+            return Collections.emptySet();
+        }
+        return Collections.unmodifiableSet(new HashSet<>(preyRates.keySet()));
+    }
+
+    public static boolean canEat(String predator, String prey) {
+        return getSuccessRate(predator, prey) > 0;
     }
 }

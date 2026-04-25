@@ -7,20 +7,19 @@ public class Wolf extends Predators {
 
     private static final Logger LOGGER = Logger.getLogger(Wolf.class.getName());
 
-    public Wolf(int currentCount) {
-        super("wolf", currentCount);
+    public Wolf() {
+        super("wolf");
     }
 
     @Override
     public Organism createNewInstance() {
         LOGGER.log(Level.INFO, "Родился волчонок!");
-        return new Wolf(1);
+        return new Wolf();
     }
 
     @Override
     public String toString() {
         return "Wolf{" +
-                "count=" + getCurrentCount() +
                 ", weight=" + getWeight() +
                 '}';
     }

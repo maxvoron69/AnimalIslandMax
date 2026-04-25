@@ -9,20 +9,19 @@ public class Goat extends Herbivores {
 
     private static final Logger LOGGER = Logger.getLogger(Goat.class.getName());
 
-    public Goat(int currentCount) {
-        super("goat", currentCount);
+    public Goat() {
+        super("goat");
     }
 
     @Override
     public Organism createNewInstance() {
         LOGGER.log(Level.INFO, "Родился козлёнок!");
-        return new Goat(1);
+        return new Goat();
     }
 
     @Override
     public String toString() {
         return "Goat{" +
-                "count=" + getCurrentCount() +
                 ", weight=" + getWeight() +
                 '}';
     }

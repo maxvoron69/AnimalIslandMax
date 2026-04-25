@@ -37,7 +37,7 @@ public class PlantConfig {
         return (int) getDouble(key);
     }
 
-    public static double getWeight() {
+    public static double getPlantWeight() {
         return getDouble("plant.weight");
     }
 
@@ -52,6 +52,9 @@ public class PlantConfig {
     public static String getEmoji() {
         return PROPERTIES.getProperty("plant.emoji", "?");
     }
+
+    public static int getPlantInitial(){return getInt("plant.initial");}
 }
+
 
 

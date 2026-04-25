@@ -9,20 +9,19 @@ public class Boar extends Herbivores {
 
     private static final Logger LOGGER = Logger.getLogger(Boar.class.getName());
 
-    public Boar(int currentCount) {
-        super("boar", currentCount);
+    public Boar() {
+        super("boar");
     }
 
     @Override
     public Organism createNewInstance() {
         LOGGER.log(Level.INFO, "Родился кабанчик!");
-        return new Boar(1);
+        return new Boar();
     }
 
     @Override
     public String toString() {
         return "Boar{" +
-                "count=" + getCurrentCount() +
                 ", weight=" + getWeight() +
                 '}';
     }

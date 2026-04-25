@@ -9,20 +9,19 @@ public class Deer extends Herbivores {
 
     private static final Logger LOGGER = Logger.getLogger(Deer.class.getName());
 
-    public Deer(int currentCount) {
-        super("deer", currentCount);
+    public Deer() {
+        super("deer");
     }
 
     @Override
     public Organism createNewInstance() {
         LOGGER.log(Level.INFO, "Родился оленёнок!");
-        return new Deer(1);
+        return new Deer();
     }
 
     @Override
     public String toString() {
         return "Deer{" +
-                "count=" + getCurrentCount() +
                 ", weight=" + getWeight() +
                 '}';
     }

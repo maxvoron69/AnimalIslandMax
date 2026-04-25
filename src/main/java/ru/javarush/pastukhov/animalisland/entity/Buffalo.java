@@ -9,20 +9,19 @@ public class Buffalo extends Herbivores {
 
     private static final Logger LOGGER = Logger.getLogger(Buffalo.class.getName());
 
-    public Buffalo(int currentCount) {
-        super("buffalo", currentCount);
+    public Buffalo() {
+        super("buffalo");
     }
 
     @Override
     public Organism createNewInstance() {
         LOGGER.log(Level.INFO, "Родился буйволёнок!");
-        return new Buffalo(1);
+        return new Buffalo();
     }
 
     @Override
     public String toString() {
         return "Buffalo{" +
-                "count=" + getCurrentCount() +
                 ", weight=" + getWeight() +
                 '}';
     }

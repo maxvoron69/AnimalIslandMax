@@ -9,20 +9,19 @@ public class Rabbit extends Herbivores {
 
     private static final Logger LOGGER = Logger.getLogger(Rabbit.class.getName());
 
-    public Rabbit(int currentCount) {
-        super("rabbit", currentCount);
+    public Rabbit() {
+        super("rabbit");
     }
 
     @Override
     public Organism createNewInstance() {
         LOGGER.log(Level.INFO, "Родился крольчонок!");
-        return new Rabbit(1);
+        return new Rabbit();
     }
 
     @Override
     public String toString() {
         return "Rabbit{" +
-                "count=" + getCurrentCount() +
                 ", weight=" + getWeight() +
                 '}';
     }

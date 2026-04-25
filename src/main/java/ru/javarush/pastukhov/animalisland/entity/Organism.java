@@ -1,22 +1,12 @@
 package ru.javarush.pastukhov.animalisland.entity;
 
-import ru.javarush.pastukhov.animalisland.config.AnimalConfig;
-import ru.javarush.pastukhov.animalisland.config.GameConfig;
 import ru.javarush.pastukhov.animalisland.util.TranslationUtil;
-
-import static ru.javarush.pastukhov.animalisland.config.AnimalConfig.getMaxCount;
 
 public abstract class Organism {
     protected String type;
-    protected int currentCount;
 
-    public Organism(String type, int currentCount) {
+    public Organism(String type) {
         this.type = type;
-        this.currentCount = currentCount;
-    }
-
-    public Organism reproduce() {
-        return createNewInstance();
     }
 
     public abstract Organism createNewInstance();
@@ -25,12 +15,11 @@ public abstract class Organism {
         return type;
     }
 
-    public int getCurrentCount() {
-        return currentCount;
-    }
-
     public String getLocalizedType() {
-        return TranslationUtil.capitalize(TranslationUtil.toNominativ(getType()));
+        String type = getType();
+        if (type == null) return "Неизвестно";
+        String nominative = TranslationUtil.toNominativ(type);
+        return TranslationUtil.capitalize(nominative != null ? nominative : type);
     }
 }
 

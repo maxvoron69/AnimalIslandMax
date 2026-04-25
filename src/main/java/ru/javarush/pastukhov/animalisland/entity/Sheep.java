@@ -7,20 +7,19 @@ public class Sheep extends Herbivores {
 
     private static final Logger LOGGER = Logger.getLogger(Sheep.class.getName());
 
-    public Sheep(int currentCount) {
-        super("sheep", currentCount);
+    public Sheep() {
+        super("sheep");
     }
 
     @Override
     public Organism createNewInstance() {
         LOGGER.log(Level.INFO, "Родился ягнёнок!");
-        return new Sheep(1);
+        return new Sheep();
     }
 
     @Override
     public String toString() {
         return "Sheep{" +
-                "count=" + getCurrentCount() +
                 ", weight=" + getWeight() +
                 '}';
     }

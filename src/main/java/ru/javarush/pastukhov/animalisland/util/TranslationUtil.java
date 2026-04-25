@@ -69,6 +69,49 @@ public class TranslationUtil {
             default -> type;
         };
     }
+
+    public static String toNomPlural(String type) {
+        return switch (type.toLowerCase()) {
+            case "horse" -> "лошади";
+            case "sheep" -> "овцы";
+            case "goat" -> "козы";
+            case "rabbit" -> "кролики";
+            case "deer" -> "олени";
+            case "mouse" -> "мыши";
+            case "boar" -> "кабаны";
+            case "buffalo" -> "буйволы";
+            case "duck" -> "утки";
+            case "caterpillar" -> "гусеницы";
+
+            case "wolf" -> "волки";
+            case "fox" -> "лисы";
+            case "bear" -> "медведи";
+            case "eagle" -> "орлы";
+            case "boa" -> "удавы";
+
+            default -> type;
+        };
+    }
+
+    public static String toGenetiv(String type) {
+        return switch (type) {
+            case "sheep" -> "овцы";
+            case "deer" -> "оленя";
+            case "fox" -> "лисы";
+            case "horse" -> "лошади";
+            case "goat" -> "козы";
+            case "rabbit" -> "кролика";
+            case "mouse" -> "мыши";
+            case "boar" -> "кабана";
+            case "buffalo" -> "буйвола";
+            case "duck" -> "утки";
+            case "caterpillar" -> "гусеницы";
+            case "boa" -> "удава";
+
+            default -> type;
+        };
+    }
+
     public static String capitalize(String s) {
         if (s == null || s.isEmpty()) return s;
         return s.substring(0, 1).toUpperCase() + s.substring(1);

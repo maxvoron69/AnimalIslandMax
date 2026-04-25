@@ -4,6 +4,6 @@ public enum Direction {
     UP, DOWN, LEFT, RIGHT, NONE;
 
     public static Direction getRandom() {
-        return values()[(int) (GameUtils.RANDOM.nextDouble() * values().length)];
+        return values()[(int) (GameUtils.RANDOM.nextInt(values().length))];
     }
 }

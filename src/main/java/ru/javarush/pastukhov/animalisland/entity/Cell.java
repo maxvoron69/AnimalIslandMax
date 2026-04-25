@@ -1,21 +1,22 @@
 package ru.javarush.pastukhov.animalisland.entity;
 
+import ru.javarush.pastukhov.animalisland.config.PlantConfig;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Cell {
     private final List<Animals> animals = new ArrayList<>();
     private Plant plants;
     private final int x;
+    private final int y;
 
     public Cell(int x, int y) {
         this.x = x;
         this.y = y;
-        this.plants = new Plant(10); // начальное количество растений
+        this.plants = new Plant(PlantConfig.getPlantInitial());
     }
-
-    private final int y;
-
 
     public int getX() {
         return x;
@@ -33,8 +34,8 @@ public class Cell {
     }
 
     public List<Animals> getAnimals() {
-        return animals;
-    }
+    return Collections.unmodifiableList(animals);
+}
 
     public Plant getPlants() {
         return plants;
