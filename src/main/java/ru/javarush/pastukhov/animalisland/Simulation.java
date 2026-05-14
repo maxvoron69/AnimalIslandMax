@@ -11,6 +11,9 @@ import ru.javarush.pastukhov.animalisland.util.TranslationUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import static ru.javarush.pastukhov.animalisland.util.TranslationUtil.capitalize;
@@ -28,29 +31,61 @@ public class Simulation {
     private int currentTurn = 0;
     private final List<PopulationRecord> history = new ArrayList<>();
 
+    // Планировщик для запуска ходов по расписанию
+    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor(r -> {
+        Thread t = new Thread(r);
+        t.setName("Simulation-Scheduler");
+        t.setDaemon(false);
+        return t;
+    });
+
     public Simulation() {
         spawner.spawnAll(island);
     }
 
-    public void run() {
+    public void start() {
         renderer.render(island);
 
-        // Меняем счётчик: теперь игра может закончиться раньше
-        while (!isGameOver()) {
-            LOGGER.info("--- Ход " + (++currentTurn) + " ---");
-            processTurn();
-            renderer.render(island);
-            printCurrentStats();
-            sleep();
+        long tickDelayMs = GameConfig.getTickDelay();
+        scheduler.scheduleAtFixedRate(this::processTurn, 0, tickDelayMs, TimeUnit.MILLISECONDS);
+    }
 
-            // Ограничиваем максимальное количество ходов (на всякий случай)
-            if (currentTurn >= GameConfig.getMaxTurns()) {
-                LOGGER.warning("Достигнуто максимальное количество ходов: " + GameConfig.getMaxTurns());
-                break;
+    public void stop() {
+        LOGGER.info("Остановка симуляции...");
+        scheduler.shutdown();
+        processor.shutdown();
+        try {
+            if (!scheduler.awaitTermination(5, TimeUnit.SECONDS)) {
+                scheduler.shutdownNow();
             }
+        } catch (InterruptedException e) {
+            scheduler.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
+        printFinalStats();
+    }
+
+    private void processTurn() {
+        if (isGameOver()) {
+            LOGGER.warning("Игра окончена. Ходы больше не выполняются.");
+            return;
         }
 
-        printFinalStats();
+        LOGGER.info("--- Ход " + (++currentTurn) + " ---");
+        processTurnInternal();
+        renderer.render(island);
+        printCurrentStats();
+
+        if (currentTurn >= GameConfig.getMaxTurns()) {
+            LOGGER.warning("Достигнуто максимальное количество ходов: " + GameConfig.getMaxTurns());
+            stop();
+        }
+    }
+
+    private void processTurnInternal() {
+        mover.moveAll(island, getAllAnimals());
+        processor.processAll(island);
+        history.add(statsCollector.collect(island, currentTurn));
     }
 
     private boolean isGameOver() {
@@ -59,7 +94,7 @@ public class Simulation {
         return switch (condition.toLowerCase()) {
             case "nofood" -> noFoodCondition();
             case "alldead" -> allAnimalsDead();
-            case "maxturns" -> currentTurn >= GameConfig.getMaxTurns(); // уже есть в цикле, но можно дублировать
+            case "maxturns" -> currentTurn >= GameConfig.getMaxTurns();
             default -> throw new IllegalStateException("Неизвестное условие остановки: " + condition);
         };
     }
@@ -94,12 +129,6 @@ public class Simulation {
             }
         }
         return true;
-    }
-
-    private void processTurn() {
-        mover.moveAll(island, getAllAnimals());
-        processor.processAll(island);
-        history.add(statsCollector.collect(island, currentTurn));
     }
 
     private List<Animals> getAllAnimals() {
@@ -158,12 +187,4 @@ public class Simulation {
         }
     }
 
-    private void sleep() {
-        try {
-            Thread.sleep(GameConfig.getTickDelay());
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            LOGGER.warning("Симуляция прервана");
-        }
-    }
 }

@@ -7,40 +7,60 @@ import ru.javarush.pastukhov.animalisland.util.TranslationUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class CellProcessor {
     private static final Logger LOGGER = Logger.getLogger(CellProcessor.class.getName());
 
+    private final ExecutorService workerPool = Executors.newFixedThreadPool(
+            Runtime.getRuntime().availableProcessors(),
+            r -> {
+                Thread t = new Thread(r);
+                t.setDaemon(true);
+                return t;
+            }
+    );
+
+    public void shutdown() {
+        workerPool.shutdown();
+        try {
+            if (!workerPool.awaitTermination(5, TimeUnit.SECONDS)) {
+                workerPool.shutdownNow();
+                if (!workerPool.awaitTermination(5, TimeUnit.SECONDS)) {
+                    LOGGER.warning("Пул потоков CellProcessor не завершился");
+                }
+            }
+        } catch (InterruptedException e) {
+            workerPool.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
+    }
+
     public void processAll(Island island) {
-        List<CellTask> tasks = new ArrayList<>();
 
         for (int x = 0; x < island.getWidth(); x++) {
             for (int y = 0; y < island.getHeight(); y++) {
-                tasks.add(new CellTask(x, y));
+                int finalX = x;
+                int finalY = y;
+                workerPool.submit(() -> {
+                    try {
+                        Cell cell = island.getCell(finalX, finalY);
+                        if (cell != null) {
+                            process(cell, finalX, finalY);
+                        }
+                    } catch (Exception e) {
+                        LOGGER.warning(String.format(
+                                "Ошибка при обработке клетки (%d, %d): %s", finalX, finalY, e.getMessage()
+                        ));
+                        if (e instanceof RuntimeException && !(e instanceof IllegalArgumentException)) {
+                            LOGGER.log(java.util.logging.Level.SEVERE, "Стек вызовов:", e);
+                        }
+                    }
+                });
             }
-        }
-
-        tasks.parallelStream().forEach(task -> {
-            try {
-                Cell cell = island.getCell(task.x, task.y);
-                if (cell != null) {
-                    process(cell, task.x, task.y);
-                }
-            } catch (Exception e) {
-                LOGGER.warning(String.format("Ошибка при обработке клетки (%d, %d): %s", task.x, task.y, e.getMessage()));
-                if (e instanceof RuntimeException && !(e instanceof IllegalArgumentException)) {
-                    LOGGER.log(java.util.logging.Level.SEVERE, "Стек вызовов:", e);
-                }
-            }
-        });
-    }
-
-    private static class CellTask {
-        final int x, y;
-        CellTask(int x, int y) {
-            this.x = x;
-            this.y = y;
         }
     }
 
@@ -67,7 +87,8 @@ public class CellProcessor {
                 ((Herbivores) herbivore).setCurrentCell(cell);
                 boolean ate = herbivore.eat();
                 if (ate) {
-                    cell.consumePlant();                 }
+                    cell.consumePlant();
+                }
             }
         }
 
