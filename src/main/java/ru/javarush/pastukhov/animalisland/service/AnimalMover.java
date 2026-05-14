@@ -8,12 +8,12 @@ import java.util.List;
 
 public class AnimalMover {
     public void moveAll(Island island, List<Animals> allAnimals) {
-        for (Animals animal : allAnimals) {
+        allAnimals.parallelStream().forEach(animal -> {
             int[] pos = animal.getPosition();
             if (pos != null) {
                 moveAnimal(animal, pos[0], pos[1], island);
             }
-        }
+        });
     }
 
     private void moveAnimal(Animals animal, int fromX, int fromY, Island island) {
@@ -35,21 +35,16 @@ public class AnimalMover {
             Cell fromCell = island.getCell(currentX, currentY);
             Cell toCell = island.getCell(newX, newY);
 
-            if (fromCell == null || toCell == null) {
-                continue;
-            }
+            if (fromCell == null || toCell == null) continue;
 
-            fromCell.getAnimals().remove(animal);
+            fromCell.removeAnimal(animal);
             toCell.addAnimal(animal);
             animal.setPosition(newX, newY);
             currentX = newX;
             currentY = newY;
 
-
             if (animal instanceof Duck) ((Duck) animal).setCurrentCell(toCell);
             if (animal instanceof Herbivores) ((Herbivores) animal).setCurrentCell(toCell);
-
-
         }
 
         int[] finalPos = animal.getPosition();

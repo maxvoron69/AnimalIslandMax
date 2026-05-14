@@ -3,7 +3,6 @@ package ru.javarush.pastukhov.animalisland.entity;
 import ru.javarush.pastukhov.animalisland.config.PlantConfig;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Cell {
@@ -26,41 +25,62 @@ public class Cell {
         return y;
     }
 
-    public void addAnimal(Animals animal) {
+    public synchronized void addAnimal(Animals animal) {
         if (animal == null) {
             return;
         }
         animals.add(animal);
     }
 
-    public List<Animals> getAnimals() {
-    return Collections.unmodifiableList(animals);
-}
+    public synchronized List<Animals> getAnimals() {
+        return new ArrayList<>(animals);
+    }
 
-    public Plant getPlants() {
+    public synchronized boolean removeAnimal(Animals animal) {
+        return animals.remove(animal);
+    }
+
+    public synchronized void clearAnimals() {
+        animals.clear();
+    }
+
+    public synchronized Plant getPlants() {
         return plants;
     }
 
-    public void setPlants(Plant plants) {
+    public synchronized void setPlants(Plant plants) {
         if (plants == null) {
             throw new IllegalArgumentException("Растения не могут быть null");
         }
         this.plants = plants;
     }
 
-    public boolean hasPlantsAvailable() {
+    public synchronized boolean hasPlantsAvailable() {
         return plants.getCurrentCount() > 0;
+    }
+
+    public synchronized void consumePlant() {
+        if (plants.getCurrentCount() > 0) {
+            plants = (Plant) plants.consume();
+        }
+    }
+
+    public synchronized void growPlant() {
+        if (plants.canGrow() && Math.random() < PlantConfig.getGrowthRate()) {
+            plants = (Plant) plants.createNewInstance();
+        }
     }
 
     @Override
     public String toString() {
-        return "Cell{" +
-                "x=" + x +
-                ", y=" + y +
-                ", животных=" + animals.size() +
-                ", растений=" + plants.getCurrentCount() +
-                '}';
+        synchronized (this) {
+            return "Cell{" +
+                    "x=" + x +
+                    ", y=" + y +
+                    ", животных=" + animals.size() +
+                    ", растений=" + plants.getCurrentCount() +
+                    '}';
+        }
     }
 }
-
 
