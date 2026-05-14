@@ -5,8 +5,11 @@ import ru.javarush.pastukhov.animalisland.entity.*;
 import ru.javarush.pastukhov.animalisland.util.Direction;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 public class AnimalMover {
+    private static final Logger LOGGER = Logger.getLogger(AnimalMover.class.getName());
+
     public void moveAll(Island island, List<Animals> allAnimals) {
         allAnimals.parallelStream().forEach(animal -> {
             int[] pos = animal.getPosition();
@@ -49,8 +52,8 @@ public class AnimalMover {
 
         int[] finalPos = animal.getPosition();
         if (finalPos[0] != fromX || finalPos[1] != fromY) {
-            System.out.printf("%s переместился из (%d, %d) в (%d, %d)%n",
-                    animal.getLocalizedType(), fromX, fromY, finalPos[0], finalPos[1]);
+           LOGGER.info(String.format("%s переместился из (%d, %d) в (%d, %d)",
+        animal.getLocalizedType(), fromX, fromY, finalPos[0], finalPos[1]));
         }
     }
 }
