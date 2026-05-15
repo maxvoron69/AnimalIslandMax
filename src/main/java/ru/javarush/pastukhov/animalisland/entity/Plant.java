@@ -17,7 +17,7 @@ public class Plant extends Organism {
         this.currentCount = Math.max(count, 0);
     }
 
-    public boolean eat() {
+    public final boolean eat() {
         LOGGER.log(Level.WARNING, "Растения не едят.");
         return false;
     }
@@ -27,9 +27,9 @@ public class Plant extends Organism {
     }
 
     @Override
-    public Organism createNewInstance() {
+    public Organism createNewInstance(int currentCount) {
         if (currentCount >= MAX_PLANTS_PER_CELL) {
-            return new Plant(currentCount); // копия, а не this
+            return this;
         }
         return new Plant(currentCount + 1);
     }

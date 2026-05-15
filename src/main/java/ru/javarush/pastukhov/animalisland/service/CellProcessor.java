@@ -39,7 +39,7 @@ public class CellProcessor {
         }
     }
 
-    public void processAll(Island island) {
+    public void processAll(Island island, int currentTurn) {
 
         for (int x = 0; x < island.getWidth(); x++) {
             for (int y = 0; y < island.getHeight(); y++) {
@@ -49,7 +49,7 @@ public class CellProcessor {
                     try {
                         Cell cell = island.getCell(finalX, finalY);
                         if (cell != null) {
-                            process(cell, finalX, finalY);
+                            process(cell, finalX, finalY, currentTurn);
                         }
                     } catch (Exception e) {
                         LOGGER.warning(String.format(
@@ -64,7 +64,7 @@ public class CellProcessor {
         }
     }
 
-    public void process(Cell cell, int x, int y) {
+    public void process(Cell cell, int x, int y, int currentTurn) {
         List<Animals> animals = new ArrayList<>(cell.getAnimals());
 
         // --- Охота ---
@@ -93,11 +93,11 @@ public class CellProcessor {
         }
 
         // --- Рост растений ---
-        cell.growPlant();
+        cell.growPlant(currentTurn);
 
         // --- Размножение ---
         for (Animals animal : new ArrayList<>(cell.getAnimals())) {
-            Organism child = animal.reproduce(cell);
+            Organism child = animal.reproduce(cell, currentTurn);
             if (child != null) {
                 cell.addAnimal((Animals) child);
             }

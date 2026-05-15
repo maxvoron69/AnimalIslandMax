@@ -30,6 +30,7 @@ public abstract class Predators extends Animals {
         }
 
         List<Animals> animals = new ArrayList<>(cell.getAnimals());
+        List<Animals> preyToRemove = new ArrayList<>(); // собираем добычу
         boolean preyFound = false;
         boolean huntSuccessful = false;
 
@@ -48,7 +49,7 @@ public abstract class Predators extends Animals {
                     double canEatNow = Math.min(preyWeight, neededToFull);
 
                     foodEatenToday += canEatNow;
-                    cell.getAnimals().remove(animal);
+                    preyToRemove.add(animal); // помечаем на удаление
 
                     LOGGER.info(String.format(
                             "%s съел(а) %.2f кг %s. Всего сегодня: %.2f кг",
@@ -64,6 +65,7 @@ public abstract class Predators extends Animals {
                         resetHunger();
                         LOGGER.log(Level.INFO, getLocalizedType() + " полностью насытился(лась)!");
                         daysWithoutFullMeal = 0;
+                        break; // больше не ест
                     }
                 } else {
                     LOGGER.info(String.format("%s промахнулся при охоте на %s",
@@ -73,12 +75,17 @@ public abstract class Predators extends Animals {
             }
         }
 
+        for (Animals prey : preyToRemove) {
+            cell.removeAnimal(prey);
+        }
+
         if (!preyFound) {
             String message = String.format("%s не нашёл %s для охоты",
                     getLocalizedType(),
                     TranslationUtil.toNominativPlural(preyType));
             LOGGER.log(Level.INFO, message);
         }
+
         return huntSuccessful;
     }
 

@@ -84,7 +84,7 @@ public class Simulation {
 
     private void processTurnInternal() {
         mover.moveAll(island, getAllAnimals());
-        processor.processAll(island);
+        processor.processAll(island, currentTurn);
         history.add(statsCollector.collect(island, currentTurn));
     }
 

@@ -20,6 +20,8 @@ public abstract class Animals extends Organism implements Movable {
     protected int daysWithoutFullMeal = 0;
     protected static final int MAX_DAYS_WITHOUT_FULL_MEAL = 5;
 
+    protected int nextAllowedReproduceTurn = 0;
+
     private static final Logger LOGGER = Logger.getLogger(Animals.class.getName());
 
     public Animals(String type) {
@@ -47,13 +49,23 @@ public abstract class Animals extends Organism implements Movable {
         return new int[]{x, y};
     }
 
-    public Animals reproduce(Cell cell) {
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public final Animals reproduce(Cell cell, int currentTurn) {
         int totalInCell = getTotalCountInCell(cell);
-        if (totalInCell >= maxCount) {
+        if (totalInCell >= maxCount || currentTurn < nextAllowedReproduceTurn) {
             return null;
         }
-        Animals child = (Animals) createNewInstance();
+
+        Animals child = (Animals) createNewInstance(currentTurn);
         child.setPosition(this.x, this.y);
+        nextAllowedReproduceTurn = currentTurn + 3;
         return child;
     }
 
@@ -76,7 +88,7 @@ public abstract class Animals extends Organism implements Movable {
                         " умер(ла) от хронического недоедания (5 дней без полного насыщения)");
             }
         } else {
-            daysWithoutFullMeal = 0; // сыт — сбрасываем
+            daysWithoutFullMeal = 0;
         }
     }
 

@@ -14,9 +14,12 @@ public class Horse extends Herbivores {
     }
 
     @Override
-    public Organism createNewInstance() {
+    public Organism createNewInstance(int currentTurn) {
+        Horse horse = new Horse();
+        horse.setPosition(this.getX(), this.getY());
+        horse.nextAllowedReproduceTurn = currentTurn + 3;
         LOGGER.log(Level.INFO, "Родился жеребёнок!");
-        return new Horse();
+        return horse;
     }
 
     @Override

@@ -14,9 +14,12 @@ public class Buffalo extends Herbivores {
     }
 
     @Override
-    public Organism createNewInstance() {
+    public Organism createNewInstance(int currentTurn) {
+        Buffalo buffalo = new Buffalo();
+        buffalo.setPosition(this.getX(), this.getY());
+        buffalo.nextAllowedReproduceTurn = currentTurn + 3;
         LOGGER.log(Level.INFO, "Родился буйволёнок!");
-        return new Buffalo();
+        return buffalo;
     }
 
     @Override

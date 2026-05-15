@@ -14,9 +14,12 @@ public class Mouse extends Herbivores {
     }
 
     @Override
-    public Organism createNewInstance() {
+    public Organism createNewInstance(int currentTurn) {
+        Mouse mouse = new Mouse();
+        mouse.setPosition(this.getX(), this.getY());
+        mouse.nextAllowedReproduceTurn = currentTurn + 3;
         LOGGER.log(Level.INFO, "Родился мышонок!");
-        return new Mouse();
+        return mouse;
     }
 
     @Override

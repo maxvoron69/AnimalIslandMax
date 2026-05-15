@@ -40,10 +40,6 @@ public class Cell {
         return animals.remove(animal);
     }
 
-    public synchronized void clearAnimals() {
-        animals.clear();
-    }
-
     public synchronized Plant getPlants() {
         return plants;
     }
@@ -60,27 +56,24 @@ public class Cell {
     }
 
     public synchronized void consumePlant() {
-        if (plants.getCurrentCount() > 0) {
-            plants = (Plant) plants.consume();
-        }
+        plants = (Plant) plants.consume();
     }
 
-    public synchronized void growPlant() {
+    public synchronized void growPlant(int currentTurn) {
         if (plants.canGrow() && Math.random() < PlantConfig.getGrowthRate()) {
-            plants = (Plant) plants.createNewInstance();
+            plants = (Plant) plants.createNewInstance(currentTurn);
         }
     }
 
     @Override
-    public String toString() {
-        synchronized (this) {
-            return "Cell{" +
-                    "x=" + x +
-                    ", y=" + y +
-                    ", животных=" + animals.size() +
-                    ", растений=" + plants.getCurrentCount() +
-                    '}';
-        }
+    public synchronized String toString() {
+        return "Cell{" +
+                "x=" + x +
+                ", y=" + y +
+                ", животных=" + animals.size() +
+                ", растений=" + plants.getCurrentCount() +
+                '}';
     }
 }
+
 

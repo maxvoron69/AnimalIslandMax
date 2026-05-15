@@ -14,9 +14,12 @@ public class Caterpillar extends Herbivores {
     }
 
     @Override
-    public Organism createNewInstance() {
+    public Organism createNewInstance(int currentTurn) {
+        Caterpillar caterpillar = new Caterpillar();
+        caterpillar.setPosition(this.getX(), this.getY());
+        caterpillar.nextAllowedReproduceTurn = currentTurn + 3;
         LOGGER.log(Level.INFO, "Родилась гусеничка!");
-        return new Caterpillar();
+        return caterpillar;
     }
 
     @Override

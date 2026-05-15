@@ -14,9 +14,12 @@ public class Boar extends Herbivores {
     }
 
     @Override
-    public Organism createNewInstance() {
+    public Organism createNewInstance(int currentTurn) {
+        Boar boar = new Boar();
+        boar.setPosition(this.getX(), this.getY());
+        boar.nextAllowedReproduceTurn = currentTurn + 3;
         LOGGER.log(Level.INFO, "Родился кабанчик!");
-        return new Boar();
+        return boar;
     }
 
     @Override

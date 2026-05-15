@@ -12,9 +12,12 @@ public class Boa extends Predators {
     }
 
     @Override
-    public Organism createNewInstance() {
+    public Organism createNewInstance(int currentTurn) {
+        Boa boa = new Boa();
+        boa.setPosition(this.getX(), this.getY());
+        boa.nextAllowedReproduceTurn = currentTurn + 3;
         LOGGER.log(Level.INFO, "Родился удав!");
-        return new Boa();
+        return boa;
     }
 
     @Override

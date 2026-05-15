@@ -12,9 +12,12 @@ public class Eagle extends Predators {
     }
 
     @Override
-    public Organism createNewInstance() {
+    public Organism createNewInstance(int currentTurn) {
+        Eagle eagle = new Eagle();
+        eagle.setPosition(this.getX(), this.getY());
+        eagle.nextAllowedReproduceTurn = currentTurn + 3;
         LOGGER.log(Level.INFO, "Родился орлёнок!");
-        return new Eagle();
+        return eagle;
     }
 
     @Override

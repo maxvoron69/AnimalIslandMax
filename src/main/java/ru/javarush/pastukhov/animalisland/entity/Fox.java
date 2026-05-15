@@ -12,9 +12,12 @@ public class Fox extends Predators {
     }
 
     @Override
-    public Organism createNewInstance() {
+    public Organism createNewInstance(int currentTurn) {
+        Fox fox = new Fox();
+        fox.setPosition(this.getX(), this.getY());
+        fox.nextAllowedReproduceTurn = currentTurn + 3;
         LOGGER.log(Level.INFO, "Родился лисёнок!");
-        return new Fox();
+        return fox;
     }
 
     @Override

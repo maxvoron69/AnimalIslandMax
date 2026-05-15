@@ -12,9 +12,12 @@ public class Bear extends Predators {
     }
 
     @Override
-    public Organism createNewInstance() {
+     public Organism createNewInstance(int currentTurn) {
+        Bear bear = new Bear();
+        bear.setPosition(this.getX(), this.getY());
+        bear.nextAllowedReproduceTurn = currentTurn + 3;
         LOGGER.log(Level.INFO, "Родился медвежонок!");
-        return new Bear();
+        return bear;
     }
 
     @Override

@@ -60,9 +60,12 @@ public class Duck extends Herbivores {
     }
 
     @Override
-    public Organism createNewInstance() {
+    public Organism createNewInstance(int currentTurn) {
+        Duck duck = new Duck();
+        duck.setPosition(this.getX(), this.getY());
+        duck.nextAllowedReproduceTurn = currentTurn + 3;
         LOGGER.log(Level.INFO, "Родился утёнок!");
-        return new Duck();
+        return duck;
     }
 
     @Override
