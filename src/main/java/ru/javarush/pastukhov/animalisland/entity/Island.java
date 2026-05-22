@@ -14,8 +14,8 @@ public class Island {
         this.height = GameConfig.getIslandHeight();
 
         if (width <= 0 || height <= 0) {
-        throw new IllegalStateException("Размер острова должен быть > 0: " + width + "x" + height);
-    }
+            throw new IllegalStateException("Размер острова должен быть > 0: " + width + "x" + height);
+        }
 
         this.cells = new Cell[width][height];
 
@@ -41,11 +41,4 @@ public class Island {
         return height;
     }
 
-    public void forEachCell(BiConsumer<Integer, Integer> action) {
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                action.accept(x, y);
-            }
-        }
-    }
 }

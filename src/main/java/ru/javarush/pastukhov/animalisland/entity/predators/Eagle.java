@@ -1,4 +1,7 @@
-package ru.javarush.pastukhov.animalisland.entity;
+package ru.javarush.pastukhov.animalisland.entity.predators;
+
+import ru.javarush.pastukhov.animalisland.entity.Organism;
+import ru.javarush.pastukhov.animalisland.entity.Predators;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

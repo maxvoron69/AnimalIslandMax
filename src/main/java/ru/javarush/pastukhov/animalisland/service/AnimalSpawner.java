@@ -3,6 +3,8 @@ package ru.javarush.pastukhov.animalisland.service;
 import ru.javarush.pastukhov.animalisland.config.AnimalConfig;
 import ru.javarush.pastukhov.animalisland.config.GameConfig;
 import ru.javarush.pastukhov.animalisland.entity.*;
+import ru.javarush.pastukhov.animalisland.entity.herbivores.*;
+import ru.javarush.pastukhov.animalisland.entity.predators.*;
 import ru.javarush.pastukhov.animalisland.util.GameUtils;
 
 import java.util.ArrayList;

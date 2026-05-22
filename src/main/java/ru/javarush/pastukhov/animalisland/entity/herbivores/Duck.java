@@ -1,6 +1,10 @@
-package ru.javarush.pastukhov.animalisland.entity;
+package ru.javarush.pastukhov.animalisland.entity.herbivores;
 
 import ru.javarush.pastukhov.animalisland.config.PredatorFoodConfig;
+import ru.javarush.pastukhov.animalisland.entity.Animals;
+import ru.javarush.pastukhov.animalisland.entity.Cell;
+import ru.javarush.pastukhov.animalisland.entity.Herbivores;
+import ru.javarush.pastukhov.animalisland.entity.Organism;
 import ru.javarush.pastukhov.animalisland.util.GameUtils;
 
 import java.util.List;

@@ -59,16 +59,4 @@ public class GameConfig {
             throw new RuntimeException("Неверный формат числа в конфиге: " + key + " = " + value);
         }
     }
-
-    private static double getDouble(String key) {
-        String value = PROPERTIES.getProperty(key);
-        if (value == null) {
-            throw new RuntimeException("Конфигурация не найдена: " + key);
-        }
-        try {
-            return Double.parseDouble(value.trim());
-        } catch (NumberFormatException e) {
-            throw new RuntimeException("Неверный формат числа в конфиге: " + key + " = " + value);
-        }
-    }
 }

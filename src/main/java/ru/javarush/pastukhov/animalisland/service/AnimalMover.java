@@ -2,6 +2,7 @@ package ru.javarush.pastukhov.animalisland.service;
 
 import ru.javarush.pastukhov.animalisland.config.AnimalConfig;
 import ru.javarush.pastukhov.animalisland.entity.*;
+import ru.javarush.pastukhov.animalisland.entity.herbivores.Duck;
 import ru.javarush.pastukhov.animalisland.util.Direction;
 
 import java.util.List;

@@ -47,8 +47,4 @@ public class PredatorFoodConfig {
         }
         return Collections.unmodifiableSet(new HashSet<>(preyRates.keySet()));
     }
-
-    public static boolean canEat(String predator, String prey) {
-        return getSuccessRate(predator, prey) > 0;
-    }
 }

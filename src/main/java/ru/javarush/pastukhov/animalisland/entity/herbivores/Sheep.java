@@ -1,4 +1,7 @@
-package ru.javarush.pastukhov.animalisland.entity;
+package ru.javarush.pastukhov.animalisland.entity.herbivores;
+
+import ru.javarush.pastukhov.animalisland.entity.Herbivores;
+import ru.javarush.pastukhov.animalisland.entity.Organism;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
