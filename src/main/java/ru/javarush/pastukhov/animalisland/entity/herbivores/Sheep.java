@@ -15,10 +15,9 @@ public class Sheep extends Herbivores {
     }
 
     @Override
-    public Organism createNewInstance(int currentTurn) {
+    public Organism createNewInstance() {
         Sheep sheep = new Sheep();
         sheep.setPosition(this.getX(), this.getY());
-        sheep.nextAllowedReproduceTurn = currentTurn + 3;
         LOGGER.log(Level.INFO, "Родился ягнёнок!");
         return sheep;
     }
@@ -26,7 +25,7 @@ public class Sheep extends Herbivores {
     @Override
     public String toString() {
         return "Sheep{" +
-                ", weight=" + getWeight() +
+                " weight=" + getWeight() +
                 '}';
     }
 }

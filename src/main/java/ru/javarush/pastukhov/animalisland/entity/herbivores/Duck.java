@@ -64,10 +64,9 @@ public class Duck extends Herbivores {
     }
 
     @Override
-    public Organism createNewInstance(int currentTurn) {
+    public Organism createNewInstance() {
         Duck duck = new Duck();
         duck.setPosition(this.getX(), this.getY());
-        duck.nextAllowedReproduceTurn = currentTurn + 3;
         LOGGER.log(Level.INFO, "Родился утёнок!");
         return duck;
     }
@@ -75,7 +74,7 @@ public class Duck extends Herbivores {
     @Override
     public String toString() {
         return "Duck{" +
-                "weight=" + getWeight() +
+                " weight=" + getWeight() +
                 '}';
     }
 }

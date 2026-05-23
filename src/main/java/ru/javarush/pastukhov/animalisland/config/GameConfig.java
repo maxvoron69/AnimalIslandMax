@@ -59,4 +59,8 @@ public class GameConfig {
             throw new RuntimeException("Неверный формат числа в конфиге: " + key + " = " + value);
         }
     }
+
+    public static double getReproductionChance() {
+        return 0.7;
+    }
 }

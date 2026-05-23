@@ -15,10 +15,9 @@ public class Goat extends Herbivores {
     }
 
     @Override
-    public Organism createNewInstance(int currentTurn) {
+    public Organism createNewInstance() {
         Goat goat = new Goat();
         goat.setPosition(this.getX(), this.getY());
-        goat.nextAllowedReproduceTurn = currentTurn + 3;
         LOGGER.log(Level.INFO, "Родился козлёнок!");
         return goat;
     }
@@ -26,7 +25,7 @@ public class Goat extends Herbivores {
     @Override
     public String toString() {
         return "Goat{" +
-                ", weight=" + getWeight() +
+                " weight=" + getWeight() +
                 '}';
     }
 }

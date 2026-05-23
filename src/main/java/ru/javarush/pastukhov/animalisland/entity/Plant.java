@@ -27,7 +27,7 @@ public class Plant extends Organism {
     }
 
     @Override
-    public Organism createNewInstance(int currentCount) {
+    public Organism createNewInstance() {
         if (currentCount >= MAX_PLANTS_PER_CELL) {
             return this;
         }

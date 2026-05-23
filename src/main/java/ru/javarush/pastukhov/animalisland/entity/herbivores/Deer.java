@@ -15,10 +15,9 @@ public class Deer extends Herbivores {
     }
 
     @Override
-    public Organism createNewInstance(int currentTurn) {
+    public Organism createNewInstance() {
         Deer deer = new Deer();
         deer.setPosition(this.getX(), this.getY());
-        deer.nextAllowedReproduceTurn = currentTurn + 3;
         LOGGER.log(Level.INFO, "Родился оленёнок!");
         return deer;
     }
@@ -26,7 +25,7 @@ public class Deer extends Herbivores {
     @Override
     public String toString() {
         return "Deer{" +
-                ", weight=" + getWeight() +
+                " weight=" + getWeight() +
                 '}';
     }
 }

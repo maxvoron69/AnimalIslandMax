@@ -3,6 +3,8 @@ package ru.javarush.pastukhov.animalisland.entity;
 import ru.javarush.pastukhov.animalisland.config.AnimalConfig;
 import ru.javarush.pastukhov.animalisland.util.Direction;
 import ru.javarush.pastukhov.animalisland.util.TranslationUtil;
+import ru.javarush.pastukhov.animalisland.config.GameConfig;
+import ru.javarush.pastukhov.animalisland.util.GameUtils;
 
 import java.util.logging.Logger;
 
@@ -19,8 +21,6 @@ public abstract class Animals extends Organism implements Movable {
 
     protected int daysWithoutFullMeal = 0;
     protected static final int MAX_DAYS_WITHOUT_FULL_MEAL = 5;
-
-    protected int nextAllowedReproduceTurn = 0;
 
     private static final Logger LOGGER = Logger.getLogger(Animals.class.getName());
 
@@ -57,15 +57,27 @@ public abstract class Animals extends Organism implements Movable {
         return y;
     }
 
-    public final Animals reproduce(Cell cell, int currentTurn) {
+    public final Animals reproduce(Cell cell) {
         int totalInCell = getTotalCountInCell(cell);
-        if (totalInCell >= maxCount || currentTurn < nextAllowedReproduceTurn) {
+
+        long count = cell.getAnimals().stream()
+                .filter(animal -> animal.getType().equals(this.getType()))
+                .count();
+
+        if (count < 2) {
             return null;
         }
 
-        Animals child = (Animals) createNewInstance(currentTurn);
+        if (totalInCell >= maxCount) {
+            return null;
+        }
+
+        if (GameUtils.RANDOM.nextDouble() >= GameConfig.getReproductionChance()) {
+            return null;
+        }
+
+        Animals child = (Animals) createNewInstance();
         child.setPosition(this.x, this.y);
-        nextAllowedReproduceTurn = currentTurn + 3;
         return child;
     }
 
@@ -78,18 +90,6 @@ public abstract class Animals extends Organism implements Movable {
 
     public void resetHunger() {
         this.daysWithoutFood = 0;
-    }
-
-    public void checkFullMeal(double foodEatenToday) {
-        if (foodEatenToday < maximumFoodLoad) {
-            daysWithoutFullMeal++;
-            if (daysWithoutFullMeal >= MAX_DAYS_WITHOUT_FULL_MEAL) {
-                LOGGER.warning(TranslationUtil.toNominativ(this.type) +
-                        " умер(ла) от хронического недоедания (5 дней без полного насыщения)");
-            }
-        } else {
-            daysWithoutFullMeal = 0;
-        }
     }
 
     public boolean isAlive() {

@@ -15,10 +15,9 @@ public class Boa extends Predators {
     }
 
     @Override
-    public Organism createNewInstance(int currentTurn) {
+    public Organism createNewInstance() {
         Boa boa = new Boa();
         boa.setPosition(this.getX(), this.getY());
-        boa.nextAllowedReproduceTurn = currentTurn + 3;
         LOGGER.log(Level.INFO, "Родился удав!");
         return boa;
     }
@@ -26,7 +25,7 @@ public class Boa extends Predators {
     @Override
     public String toString() {
         return "Boa{" +
-                ", weight=" + getWeight() +
+                " weight=" + getWeight() +
                 '}';
     }
 }

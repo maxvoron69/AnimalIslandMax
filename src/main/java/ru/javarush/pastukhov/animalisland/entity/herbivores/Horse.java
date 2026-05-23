@@ -15,10 +15,9 @@ public class Horse extends Herbivores {
     }
 
     @Override
-    public Organism createNewInstance(int currentTurn) {
+    public Organism createNewInstance() {
         Horse horse = new Horse();
         horse.setPosition(this.getX(), this.getY());
-        horse.nextAllowedReproduceTurn = currentTurn + 3;
         LOGGER.log(Level.INFO, "Родился жеребёнок!");
         return horse;
     }
@@ -26,7 +25,7 @@ public class Horse extends Herbivores {
     @Override
     public String toString() {
         return "Horse{" +
-                ", weight=" + getWeight() +
+                " weight=" + getWeight() +
                 '}';
     }
 }

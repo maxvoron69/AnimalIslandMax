@@ -15,10 +15,9 @@ public class Wolf extends Predators {
     }
 
     @Override
-    public Organism createNewInstance(int currentTurn) {
+    public Organism createNewInstance() {
         Wolf wolf = new Wolf();
         wolf.setPosition(this.getX(), this.getY());
-        wolf.nextAllowedReproduceTurn = currentTurn + 3;
         LOGGER.log(Level.INFO, "Родился волчонок!");
         return wolf;
     }
@@ -26,7 +25,7 @@ public class Wolf extends Predators {
     @Override
     public String toString() {
         return "Wolf{" +
-                ", weight=" + getWeight() +
+                " weight=" + getWeight() +
                 '}';
     }
 }

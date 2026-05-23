@@ -9,7 +9,7 @@ public abstract class Organism {
         this.type = type;
     }
 
-    public abstract Organism createNewInstance(int currentTurn);
+    public abstract Organism createNewInstance();
 
     public String getType() {
         return type;

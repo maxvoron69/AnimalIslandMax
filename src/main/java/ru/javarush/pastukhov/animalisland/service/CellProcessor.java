@@ -97,7 +97,7 @@ public class CellProcessor {
 
         // --- Размножение ---
         for (Animals animal : new ArrayList<>(cell.getAnimals())) {
-            Organism child = animal.reproduce(cell, currentTurn);
+            Organism child = animal.reproduce(cell);
             if (child != null) {
                 cell.addAnimal((Animals) child);
             }

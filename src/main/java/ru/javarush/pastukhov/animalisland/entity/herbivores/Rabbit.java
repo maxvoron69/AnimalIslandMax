@@ -15,10 +15,9 @@ public class Rabbit extends Herbivores {
     }
 
     @Override
-    public Organism createNewInstance(int currentTurn) {
+    public Organism createNewInstance() {
         Rabbit rabbit = new Rabbit();
         rabbit.setPosition(this.getX(), this.getY());
-        rabbit.nextAllowedReproduceTurn = currentTurn + 3;
         LOGGER.log(Level.INFO, "Родился крольчонок!");
         return rabbit;
     }
@@ -26,7 +25,7 @@ public class Rabbit extends Herbivores {
     @Override
     public String toString() {
         return "Rabbit{" +
-                ", weight=" + getWeight() +
+                " weight=" + getWeight() +
                 '}';
     }
 }

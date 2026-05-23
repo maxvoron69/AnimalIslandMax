@@ -61,7 +61,7 @@ public class Cell {
 
     public synchronized void growPlant(int currentTurn) {
         if (plants.canGrow() && Math.random() < PlantConfig.getGrowthRate()) {
-            plants = (Plant) plants.createNewInstance(currentTurn);
+            plants = (Plant) plants.createNewInstance();
         }
     }
 
