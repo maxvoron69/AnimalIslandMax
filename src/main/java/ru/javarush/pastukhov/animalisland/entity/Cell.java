@@ -29,6 +29,12 @@ public class Cell {
         if (animal == null) {
             return;
         }
+        int currentCount = (int) animals.stream()
+                .filter(a -> a.getType().equals(animal.getType()))
+                .count();
+        if (currentCount >= animal.maxCount) {
+            return;
+        }
         animals.add(animal);
     }
 

@@ -41,7 +41,7 @@ public class Duck extends Herbivores {
             if (animal instanceof Caterpillar && animal != this) {
                 double successRate = PredatorFoodConfig.getSuccessRate("duck", "caterpillar");
                 if (GameUtils.RANDOM.nextDouble() < successRate) {
-                    animals.remove(animal);
+                    cell.removeAnimal(animal);
                     resetHunger();
                     LOGGER.log(Level.INFO, "Утка съела гусеницу в клетке (" + cell.getX() + ", " + cell.getY() + ")");
                     return true;

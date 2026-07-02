@@ -62,6 +62,19 @@ public class CellProcessor {
                 });
             }
         }
+
+        workerPool.shutdown();
+        try {
+            if (!workerPool.awaitTermination(60, TimeUnit.SECONDS)) {
+                workerPool.shutdownNow();
+                if (!workerPool.awaitTermination(10, TimeUnit.SECONDS)) {
+                    LOGGER.warning("Пул потоков CellProcessor не завершился вовремя");
+                }
+            }
+        } catch (InterruptedException e) {
+            workerPool.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
     }
 
     public void process(Cell cell, int x, int y, int currentTurn) {
@@ -86,9 +99,6 @@ public class CellProcessor {
             if (herbivore instanceof Herbivores && cell.hasPlantsAvailable()) {
                 ((Herbivores) herbivore).setCurrentCell(cell);
                 boolean ate = herbivore.eat();
-                if (ate) {
-                    cell.consumePlant();
-                }
             }
         }
 

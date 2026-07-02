@@ -49,7 +49,7 @@ public abstract class Predators extends Animals {
                     double canEatNow = Math.min(preyWeight, neededToFull);
 
                     foodEatenToday += canEatNow;
-                    preyToRemove.add(animal); // помечаем на удаление
+                    preyToRemove.add(animal);
 
                     LOGGER.info(String.format(
                             "%s съел(а) %.2f кг %s. Всего сегодня: %.2f кг",

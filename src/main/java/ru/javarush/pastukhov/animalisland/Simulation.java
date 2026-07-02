@@ -73,6 +73,13 @@ public class Simulation {
 
         LOGGER.info("--- Ход " + (++currentTurn) + " ---");
         processTurnInternal();
+        
+        if (isGameOver()) {
+            LOGGER.warning("Игра окончена. Все животные погибли.");
+            stop();
+            return;
+        }
+        
         renderer.render(island);
         printCurrentStats();
 
